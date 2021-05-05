@@ -1,0 +1,15 @@
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 2
+end_of_line = lf
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+#下記をコード全体に反映
+# utf-8
+# indent styleをspace
+# indent sizeを2
+# ifで改行
+# ホワイトスペースを削除（first commit）
+# コードの一番最後に空行を入れる（first commit）
