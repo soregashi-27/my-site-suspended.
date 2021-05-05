@@ -5,7 +5,14 @@ Install the Gatsby CLI
 npm install -g gatsby-cli
 ```
 
-Start the development server
+## Create a web site
+
+```
+gatsby new soregashi-27-me
+```
+
+
+## Start the development server
 
 ```
 npm start
