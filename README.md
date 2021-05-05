@@ -1,3 +1,24 @@
+## Installation & Set Up
+Install the Gatsby CLI
+
+```
+npm install -g gatsby-cli
+```
+
+Start the development server
+
+```
+npm start
+```
+
+```
+gatsby develop
+```
+
+Anything alright.
+
+Editing.
+
 <!-- AUTO-GENERATED-CONTENT:START (STARTER) -->
 <p align="center">
   <a href="https://www.gatsbyjs.com">
