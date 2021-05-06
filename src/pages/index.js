@@ -1,9 +1,6 @@
 import * as React from "react"
-import { Link } from "gatsby"
-import { Contact } from "@components"
-
+import Contact from "../components/sections/contact"
 import Layout from "../components/layout"
-import Seo from "../components/seo"
 
 const IndexPage = () => (
   <Layout>
