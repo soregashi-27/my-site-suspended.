@@ -1,9 +1,11 @@
 import * as React from "react"
+import Project from "../components/sections/project"
 import Contact from "../components/sections/contact"
 import Layout from "../components/layout"
 
 const IndexPage = () => (
   <Layout>
+    <Project />
     <Contact />
   </Layout>
 )
