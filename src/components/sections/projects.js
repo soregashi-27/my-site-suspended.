@@ -27,28 +27,65 @@ const StyleProjectsSection = styled.section`
 const Projects = () => {
   const data = useStaticQuery(graphql`
     query {
-        projects: allMarkdownRemark(
-            filter: {
-                fileAbsolutePath: {regex: "/projects/"}
-                frontmatter: {showInProjects:{ne: false} }
-            }
-            sort: {fields: [frontmatter__date], order: DESC}
-        ) {
-            edges {
-                node {
-                    frontmatter {
-                        title
-                        tech
-                        github
-                        external
-                        // TODO:externalLinkに変える
-                    }
-                    html
-                }
-            }
+      projects: allMarkdownRemark(
+        filter: {
+          fileAbsolutePath: { regex: "/projects/" }
+          frontmatter: { showInProjects: { ne: false } }
         }
+        sort: { fields: [frontmatter__date], order: DESC }
+      ) {
+        edges {
+          node {
+            frontmatter {
+              title
+              tech
+              github
+              external
+            }
+            html
+          }
+        }
+      }
     }
-    `)
+  `)
+
+  const projectInner = node => {
+    const { frontmatter, html } = node
+    const { github, external, title, tech } = frontmatter
+
+    return (
+      <div className="project-inner">
+        <header>
+          <div className="project-top">
+            <div className="folder">{/* <Icon className="Folder" /> */}</div>
+            <div className="project-links">
+              {github && (
+                <a href={github} aria-label="Github Link">
+                  {/* <Icon name="Github" /> */}
+                </a>
+              )}
+              {external && (
+                <a
+                  href="{external}"
+                  aria-label="External Link"
+                  className="external"
+                >
+                  {/* <Icon name="External" /> */}
+                </a>
+              )}
+            </div>
+          </div>
+
+          <h3 className="project-title">test</h3>
+          <div className="project-description" />
+        </header>
+
+        <footer>
+          <ul className="project-tech-list"></ul>
+        </footer>
+      </div>
+    )
+  }
 }
 
 export default Projects
