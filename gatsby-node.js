@@ -10,5 +10,25 @@ const _ = require("lodash")
 exports.createPage = async graphql => {
   const { createPage } = actions
 
-  const result = await graphql(``)
+  const result = await graphql(`
+    {
+      postRemark: allMarkdownRemark(
+        sort: { order: DESC, fields: [frontmatter__date] }
+        limit: 1000
+      ) {
+        edges {
+          node {
+            frontmatter {
+              slug
+            }
+          }
+        }
+      }
+      tagsGroup: allMarkdownRemark(limit: 2000) {
+        group(field: frontmatter__tags) {
+          fieldValue
+        }
+      }
+    }
+  `)
 }
