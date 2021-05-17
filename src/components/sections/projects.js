@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react"
 import { Link, useStaticQuery, graphql } from "gatsby"
 import styled from "styled-components"
+import { usePrefersReduceMotion } from "@hooks"
 
 const StyleProjectsSection = styled.section`
   display: flex;
@@ -49,6 +50,14 @@ const Projects = () => {
     }
   `)
 
+  const prefersReduceMotion = usePrefersReduceMotion()
+
+  useEffect(() => {
+    if (prefersReduceMotion) {
+      return
+    }
+  })
+
   const projectInner = node => {
     const { frontmatter, html } = node
     const { github, external, title, tech } = frontmatter
@@ -76,7 +85,9 @@ const Projects = () => {
             </div>
           </div>
 
-          <h3 className="project-title">test</h3>
+          <h3 className="project-title">
+            <a href={external}>{title}</a>
+          </h3>
           <div className="project-description" />
         </header>
 
@@ -86,6 +97,12 @@ const Projects = () => {
       </div>
     )
   }
+
+  return (
+    <StyleProjectsSection>
+      <h2>Other Noteworthy Projects</h2>
+    </StyleProjectsSection>
+  )
 }
 
 export default Projects
