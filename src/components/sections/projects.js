@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react"
 import { Link, useStaticQuery, graphql } from "gatsby"
+import { CSSTransition, TransitionGroup } from "react-transition-group"
 import styled from "styled-components"
-import { usePrefersReduceMotion } from "@hooks"
+import { usePrefersReducedMotion } from "@hooks"
 
 const StyleProjectsSection = styled.section`
   display: flex;
@@ -22,6 +23,26 @@ const StyleProjectsSection = styled.section`
 
   @media (max-width: 1080px) {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+`
+
+const StyledProject = styled.li`
+  position: relative;
+  cursor: default;
+  transition: var(--transition);
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover,
+    &focus-with-in {
+      .project-inner {
+        transform: translateY(-7px);
+      }
+    }
+  }
+
+  a {
+    position: relative;
+    z-index: 1;
   }
 `
 
@@ -50,10 +71,10 @@ const Projects = () => {
     }
   `)
 
-  const prefersReduceMotion = usePrefersReduceMotion()
+  const prefersReducedMotion = usePrefersReducedMotion()
 
   useEffect(() => {
-    if (prefersReduceMotion) {
+    if (prefersReducedMotion) {
       return
     }
   })
@@ -101,6 +122,30 @@ const Projects = () => {
   return (
     <StyleProjectsSection>
       <h2>Other Noteworthy Projects</h2>
+
+      <ul className="project-grid">
+        {prefersReducedMotion ? (
+          <>
+            {projectsToShow &&
+              projectsToShow.map(({ node }, i) => (
+                <StyledProject key={i}>{projectInner(node)}</StyledProject>
+              ))}
+          </>
+        ) : (
+          <TransitionGroup component={null}>
+            {projectsToShow &&
+              projectsToShow.map(({ node }, i) => (
+                <CSSTransition
+                  key={i}
+                  timeout={i >= GRID_LIMIT ? (i - GRID_LIMIT) * 300 : 300}
+                  exit={false}
+                >
+                  <StyledProject key={i}></StyledProject>
+                </CSSTransition>
+              ))}
+          </TransitionGroup>
+        )}
+      </ul>
     </StyleProjectsSection>
   )
 }

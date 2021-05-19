@@ -7,7 +7,7 @@
 const path = require("path")
 const _ = require("lodash")
 
-exports.createPage = async graphql => {
+exports.createPages = async graphql => {
   const { createPage } = actions
 
   const result = await graphql(`
