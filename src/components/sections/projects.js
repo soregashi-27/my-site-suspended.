@@ -79,6 +79,11 @@ const Projects = () => {
     }
   })
 
+  const GRID_LIMIT = 6
+  const projects = data.projects.edges.filter(({ node }) => node)
+  const firstToSix = projects.slice(0, GRID_LIMIT)
+  const projectsToShow = firstToSix
+
   const projectInner = node => {
     const { frontmatter, html } = node
     const { github, external, title, tech } = frontmatter
@@ -125,12 +130,12 @@ const Projects = () => {
 
       <ul className="project-grid">
         {prefersReducedMotion ? (
-          <>
+          <div>
             {projectsToShow &&
               projectsToShow.map(({ node }, i) => (
                 <StyledProject key={i}>{projectInner(node)}</StyledProject>
               ))}
-          </>
+          </div>
         ) : (
           <TransitionGroup component={null}>
             {projectsToShow &&
@@ -140,7 +145,17 @@ const Projects = () => {
                   timeout={i >= GRID_LIMIT ? (i - GRID_LIMIT) * 300 : 300}
                   exit={false}
                 >
-                  <StyledProject key={i}></StyledProject>
+                  <StyledProject
+                    key={i}
+                    // ref={element => (revealProjects.current[i] = element)}
+                    style={{
+                      transitionDelay: `${
+                        i >= GRID_LIMIT ? (i - GRID_LIMIT) * 100 : 0
+                      }ms`,
+                    }}
+                  >
+                    {projectInner(node)}
+                  </StyledProject>
                 </CSSTransition>
               ))}
           </TransitionGroup>
