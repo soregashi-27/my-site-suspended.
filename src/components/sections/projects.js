@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react"
 import { Link, useStaticQuery, graphql } from "gatsby"
+import { CSSTransition, TransitionGroup } from "react-transition-group"
 import styled from "styled-components"
+import { usePrefersReducedMotion } from "@hooks"
 
 const StyleProjectsSection = styled.section`
   display: flex;
@@ -21,6 +23,26 @@ const StyleProjectsSection = styled.section`
 
   @media (max-width: 1080px) {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+`
+
+const StyledProject = styled.li`
+  position: relative;
+  cursor: default;
+  transition: var(--transition);
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover,
+    &focus-with-in {
+      .project-inner {
+        transform: translateY(-7px);
+      }
+    }
+  }
+
+  a {
+    position: relative;
+    z-index: 1;
   }
 `
 
@@ -49,6 +71,19 @@ const Projects = () => {
     }
   `)
 
+  const prefersReducedMotion = usePrefersReducedMotion()
+
+  useEffect(() => {
+    if (prefersReducedMotion) {
+      return
+    }
+  })
+
+  const GRID_LIMIT = 6
+  const projects = data.projects.edges.filter(({ node }) => node)
+  const firstToSix = projects.slice(0, GRID_LIMIT)
+  const projectsToShow = firstToSix
+
   const projectInner = node => {
     const { frontmatter, html } = node
     const { github, external, title, tech } = frontmatter
@@ -76,7 +111,9 @@ const Projects = () => {
             </div>
           </div>
 
-          <h3 className="project-title">test</h3>
+          <h3 className="project-title">
+            <a href={external}>{title}</a>
+          </h3>
           <div className="project-description" />
         </header>
 
@@ -86,6 +123,46 @@ const Projects = () => {
       </div>
     )
   }
+
+  return (
+    <StyleProjectsSection>
+      <h2>Other Noteworthy Projects</h2>
+
+      <ul className="project-grid">
+        {prefersReducedMotion ? (
+          <div>
+            {projectsToShow &&
+              projectsToShow.map(({ node }, i) => (
+                <StyledProject key={i}>{projectInner(node)}</StyledProject>
+              ))}
+          </div>
+        ) : (
+          <TransitionGroup component={null}>
+            {projectsToShow &&
+              projectsToShow.map(({ node }, i) => (
+                <CSSTransition
+                  key={i}
+                  timeout={i >= GRID_LIMIT ? (i - GRID_LIMIT) * 300 : 300}
+                  exit={false}
+                >
+                  <StyledProject
+                    key={i}
+                    // ref={element => (revealProjects.current[i] = element)}
+                    style={{
+                      transitionDelay: `${
+                        i >= GRID_LIMIT ? (i - GRID_LIMIT) * 100 : 0
+                      }ms`,
+                    }}
+                  >
+                    {projectInner(node)}
+                  </StyledProject>
+                </CSSTransition>
+              ))}
+          </TransitionGroup>
+        )}
+      </ul>
+    </StyleProjectsSection>
+  )
 }
 
 export default Projects
