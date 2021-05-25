@@ -31,8 +31,19 @@ module.exports = {
     },
     {
       resolve: `gatsby-transformer-remark`,
-      options: {},
-    }`gatsby-plugin-gatsby-cloud`,
+      options: {
+        plugins: [
+          {
+            resolve: "gatsby-remark-external-links",
+            options: {
+              target: "_blank",
+              rel: "nofollow noopener noreferrer",
+            },
+          },
+        ],
+      },
+    },
+    `gatsby-plugin-gatsby-cloud`,
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
